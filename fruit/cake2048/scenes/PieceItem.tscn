@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://btcybr5882lcc"]
+
+[ext_resource type="Script" path="res://scenes/piece_item.gd" id="1_ytbrw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjlo5"]
+bg_color = Color(0.933333, 0.894118, 0.854902, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="PieceItem" type="Node2D"]
+script = ExtResource("1_ytbrw")
+
+[node name="Cell" type="PanelContainer" parent="."]
+offset_right = 203.0
+offset_bottom = 203.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cjlo5")
+
+[node name="CellTxt" type="Label" parent="Cell"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.470588, 0.431373, 0.392157, 1)
+theme_override_font_sizes/font_size = 74
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
