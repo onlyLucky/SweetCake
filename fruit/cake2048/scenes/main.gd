@@ -111,8 +111,34 @@ func handle_chess_move():
 	else:
 		temp_data = chess_data
 	
+
+func chess_top_move(chess_arr):
+	for i in range(chess_arr.size()):
+		for j in range(chess_arr[i].size()):
+			if j > 0 :
+				# 上一个				
+				var pre = chess_arr[i][j-1]
+				# 当前
+				var current = chess_arr[i][j]
+				pass
+				
+
+func chess_bottom_move():
+	for i in range(chess_arr.size()):
+		chess_arr[i].reverse()
+	
+
+func chess_left_move():
+	pass
+
+func chess_right_move():
+	pass	
 	
 		
 # 是否可以移动
 func is_can_move():
+	pass
+
+# 合并棋子处理
+func merge_chess():
 	pass
