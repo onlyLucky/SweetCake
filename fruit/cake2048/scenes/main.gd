@@ -78,6 +78,7 @@ func calc_touch_direction(event: InputEventScreenTouch):
 				touch_direction = Dir.Bottom
 			else:
 				touch_direction = Dir.Top
+		handle_chess_move()
 
 ## 随机返回chess_data 为0的 x,y 坐标
 ##
@@ -102,34 +103,31 @@ func find_random_empty_position() -> Vector2:
 
 # 处理棋子的移动
 func handle_chess_move():
-	var temp_data = []
-	if touch_direction.Dir.Top or touch_direction.Dir.Bottom:
-		for i in range(chess_data.size()):
-			temp_data.push([])
-			for j in range(chess_data[i].size()):
-					temp_data[j].push(chess_data[i][j])
-	else:
-		temp_data = chess_data
-	
+	if touch_direction.Dir.Top:
+		chess_top_move();
+	if touch_direction.Dir.Bottom:
+		chess_bottom_move();
+	if touch_direction.Dir.Left:
+		chess_left_move();
+	if touch_direction.Dir.Right:
+		chess_right_move();
+		
 
-func chess_top_move(chess_arr):
-	for i in range(chess_arr.size()):
-		for j in range(chess_arr[i].size()):
-			if j > 0 :
-				# 上一个				
-				var pre = chess_arr[i][j-1]
-				# 当前
-				var current = chess_arr[i][j]
-				pass
+func chess_top_move():
+	for x in range(chess_data.size()):
+		for y in range(chess_data[x].size()):
+			pass
 				
 
 func chess_bottom_move():
-	for i in range(chess_arr.size()):
-		chess_arr[i].reverse()
+	pass
 	
 
+# 左滑
 func chess_left_move():
-	pass
+	for x in range(chess_data.size()):
+		for y in range(chess_data[x].size()):
+			# 从 y + 1 位置开始，向右查找
 
 func chess_right_move():
 	pass	
