@@ -21,6 +21,13 @@ func _ready() -> void:
 	print("main ready")
 	init_chess_data()
 	render_chess()
+	var arr = [1,0,1,2,3]
+	var y = 0
+	while y < arr.size():
+		print(arr[y])
+		if arr[y] == 0:
+			y+=1
+		y+=1
 	
 func _input(event: InputEvent):
 	if event is InputEventScreenTouch:
@@ -128,6 +135,7 @@ func chess_left_move():
 	for x in range(chess_data.size()):
 		for y in range(chess_data[x].size()):
 			# 从 y + 1 位置开始，向右查找
+			pass
 
 func chess_right_move():
 	pass	
