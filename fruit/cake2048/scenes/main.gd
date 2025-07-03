@@ -132,10 +132,13 @@ func chess_bottom_move():
 
 # 左滑
 func chess_left_move():
-	for x in range(chess_data.size()):
-		for y in range(chess_data[x].size()):
+	var x = 0
+	var y = 0
+	while x < chess_data.size():
+		while y < chess_data[x].size():
 			# 从 y + 1 位置开始，向右查找
 			pass
+			
 
 func chess_right_move():
 	pass	
