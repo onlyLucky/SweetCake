@@ -16,18 +16,13 @@ var touch_direction = Dir.Top
 var chess_data = []
 # 分数统计
 var score: int = 0
+# 棋盘的列数
+const Chess_Column = 4
 
 func _ready() -> void:
 	print("main ready")
 	init_chess_data()
 	render_chess()
-	var arr = [1,0,1,2,3]
-	var y = 0
-	while y < arr.size():
-		print(arr[y])
-		if arr[y] == 0:
-			y+=1
-		y+=1
 	
 func _input(event: InputEvent):
 	if event is InputEventScreenTouch:
@@ -42,10 +37,9 @@ func _input(event: InputEvent):
 		#print("触摸点移动: ", event.position)
 
 func init_chess_data():
-	var column = 4
-	for i in range(column):
+	for i in range(Chess_Column):
 		chess_data.append([])
-		for j in range(column):
+		for j in range(Chess_Column):
 			chess_data[i].append({
 				"chess": null,
 				"pos": Vector2(i,j),
@@ -63,10 +57,12 @@ func render_chess():
 	piece_con.add_child(piece_ins)
 	# 设置棋子数据	
 	chess_data[pos.x][pos.y] = {
-		"chess": piece_ins,
+		"chess": 'piece_ins', # piece_ins
 		"pos": pos,
 		"val": val
 	}
+	print("render_chess",pos)
+	print_chess_num()
 
 
 func calc_touch_direction(event: InputEventScreenTouch):
@@ -97,7 +93,7 @@ func find_random_empty_position() -> Vector2:
 	for i in range(chess_data.size()):
 		for j in range(chess_data[i].size()):
 			if chess_data[i][j].val == 0:
-				empty_positions.append(Vector2(j, i))  # 将位置存储为 Vector2 类型
+				empty_positions.append(Vector2(i,j))  # 将位置存储为 Vector2 类型
 
 	# 如果没有找到任何数值为 0 的位置，返回一个默认值或抛出错误
 	if empty_positions.size() == 0:
@@ -110,13 +106,13 @@ func find_random_empty_position() -> Vector2:
 
 # 处理棋子的移动
 func handle_chess_move():
-	if touch_direction.Dir.Top:
+	if touch_direction == Dir.Top:
 		chess_top_move();
-	if touch_direction.Dir.Bottom:
+	if touch_direction == Dir.Bottom:
 		chess_bottom_move();
-	if touch_direction.Dir.Left:
+	if touch_direction == Dir.Left:
 		chess_left_move();
-	if touch_direction.Dir.Right:
+	if touch_direction == Dir.Right:
 		chess_right_move();
 		
 
@@ -132,22 +128,54 @@ func chess_bottom_move():
 
 # 左滑
 func chess_left_move():
-	var x = 0
-	var y = 0
-	while x < chess_data.size():
+	print_chess_num()
+	for x in chess_data.size():
+		var y = 0
+		
 		while y < chess_data[x].size():
 			# 从 y + 1 位置开始，向右查找
-			pass
-			
+			var next = y + 1
+			while next < chess_data[x].size():
+				# 如果 next 单元格是 0，找下一个不是 0 的单元格
+				if chess_data[x][next].val == 0:
+					next+=1
+					continue
+				# 如果 y 数字是 0，则将 next 移动到 y 位置，然后将 y 减 1 重新查找
+				if chess_data[x][y].val == 0:
+					chess_move({"from":chess_data[x][next],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val = chess_data[x][next].val
+					chess_data[x][next].chess = null;
+					chess_data[x][next].val = 0
+					y-=1
+				# 如果 y 与 next 单元格数字相等，则将 next 移动并合并给 y
+				elif chess_data[x][y].val == chess_data[x][next].val:
+					chess_merge({"from":chess_data[x][next],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val += chess_data[x][next].val
+					chess_data[x][next].chess = null;
+					chess_data[x][next].val = 0
+				break
+			y+=1	
+	print_chess_num()
 
 func chess_right_move():
 	pass	
 	
-		
-# 是否可以移动
-func is_can_move():
-	pass
+
+func print_chess_num():
+	var tempNum = []
+	for x in chess_data.size():
+		var new_arr = []
+		for y in chess_data[x].size():
+			new_arr.append(chess_data[y][x].val)
+		tempNum.append(new_arr)
+	print(tempNum)
+	
+# 棋子移动
+func chess_move(chessJson):
+	print("chess_move: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"moveTo",chessJson.to.val)
 
 # 合并棋子处理
-func merge_chess():
-	pass
+func chess_merge(chessJson):
+	print("chess_merge: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"mergeTo",chessJson.to.val)
