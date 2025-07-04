@@ -117,17 +117,6 @@ func handle_chess_move():
 		
 
 func chess_top_move():
-	for x in range(chess_data.size()):
-		for y in range(chess_data[x].size()):
-			pass
-				
-
-func chess_bottom_move():
-	pass
-	
-
-# 左滑
-func chess_left_move():
 	print_chess_num()
 	for x in chess_data.size():
 		var y = 0
@@ -158,9 +147,67 @@ func chess_left_move():
 				break
 			y+=1	
 	print_chess_num()
+				
+
+func chess_bottom_move():
+	pass
+	
+
+# 左滑
+func chess_left_move():
+	print_chess_num()
+	for y in Chess_Column:
+		var x = 0
+		while x < Chess_Column:
+			var next = x+1
+			while next < Chess_Column:
+				if chess_data[next][y].val == 0:
+					next += 1
+					continue
+				if chess_data[x][y].val == 0:
+					chess_move({"from":chess_data[next][y],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val = chess_data[next][y].val
+					chess_data[next][y].chess = null;
+					chess_data[next][y].val = 0
+					x-=1
+				elif chess_data[x][y].val == chess_data[next][x].val:
+					chess_merge({"from":chess_data[next][y],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val += chess_data[next][y].val
+					chess_data[next][y].chess = null;
+					chess_data[next][y].val = 0
+				break
+			x+=1
+		
+	print_chess_num()
 
 func chess_right_move():
-	pass	
+	print_chess_num()
+	for y in Chess_Column:
+		var x = Chess_Column - 1
+		while x >= 0:
+			var pre = x - 1
+			while pre >= 0:
+				if chess_data[pre][y].val == 0:
+					pre -= 1
+					continue
+				if chess_data[x][y].val == 0:
+					chess_move({"from":chess_data[pre][y],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val = chess_data[pre][y].val
+					chess_data[pre][y].chess = null;
+					chess_data[pre][y].val = 0
+					x+=1
+				elif chess_data[x][y].val == chess_data[pre][x].val:
+					chess_merge({"from":chess_data[pre][y],"to": chess_data[x][y]})
+					# 数据更新
+					chess_data[x][y].val += chess_data[pre][y].val
+					chess_data[pre][y].chess = null;
+					chess_data[pre][y].val = 0
+				break
+			x-=1
+	print_chess_num()
 	
 
 func print_chess_num():
