@@ -8,7 +8,7 @@ class_name PieceItem
 const POS_UNIT: int = 232
 # 颜色
 const CELL_BG = ["#eee4da","#ede0c8","#f2b179","#f59563","#f67c5f","#f65e3b","#edcf72","#edcc61","#99cc00","#33b5e5","#0099cc"]
-const CELL_FColor = ["#786e64","#ffffff"]
+#const CELL_FColor = ["#786e64","#ffffff"]
 
 # CellTxt label 值
 var cell_num: int = 2

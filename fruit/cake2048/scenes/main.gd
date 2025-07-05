@@ -3,6 +3,7 @@ extends Node2D
 const PIECE_ITEM = preload("res://scenes/PieceItem.tscn")
 
 @onready var piece_con: Control = $MainCon/BG/ChessBox/ChessBorad/ChessBoardMargin/PieceCon
+@onready var score_text: Label = $MainCon/BG/TextNum
 
 #限制距离
 var limit_value:float = 150.0
@@ -23,8 +24,6 @@ func _ready() -> void:
 	print("main ready")
 	init_chess_data()
 	render_chess()
-	var answer = log(16) / log(2)
-	print(answer)
 	
 func _input(event: InputEvent):
 	if event is InputEventScreenTouch:
@@ -64,7 +63,6 @@ func render_chess():
 		"val": val
 	}
 	print("render_chess",pos)
-	print_chess_num()
 
 
 func calc_touch_direction(event: InputEventScreenTouch):
@@ -100,6 +98,8 @@ func find_random_empty_position() -> Vector2:
 	# 如果没有找到任何数值为 0 的位置，返回一个默认值或抛出错误
 	if empty_positions.size() == 0:
 		push_error("No empty positions found.")
+		# 重新开始
+		restart()
 		return Vector2(-1, -1)  # 返回一个无效的坐标
 
 	# 随机选择一个位置
@@ -249,3 +249,26 @@ func chess_merge(chessJson):
 	chess_data[toJson.pos.x][toJson.pos.y].val = calcSum
 	chess_data[fromJson.pos.x][fromJson.pos.y].chess = null;
 	chess_data[fromJson.pos.x][fromJson.pos.y].val = 0
+	# 计算分数
+	updata_score(calcSum)
+
+# 更新分数
+func updata_score(addNum: int):
+	score += addNum
+	score_text.text = str(score)
+	
+func restart():
+	# 清空piece_con节点的所有子节点
+	for child in piece_con.get_children():
+		child.queue_free()
+	chess_data = []
+	init_chess_data()
+	score = 0
+	score_text.text = str('')
+	var tween = create_tween()
+	tween.tween_interval(0.2)  # 延迟0.2秒
+	tween.tween_callback(render_chess)
+	
+
+func _on_button_pressed() -> void:
+	restart()
