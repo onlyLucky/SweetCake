@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/piece_item.gd" id="1_ytbrw"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjlo5"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_daj33"]
 bg_color = Color(0.933333, 0.894118, 0.854902, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -15,7 +15,7 @@ script = ExtResource("1_ytbrw")
 [node name="Cell" type="PanelContainer" parent="."]
 offset_right = 203.0
 offset_bottom = 203.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_cjlo5")
+theme_override_styles/panel = SubResource("StyleBoxFlat_daj33")
 
 [node name="CellTxt" type="Label" parent="Cell"]
 layout_mode = 2

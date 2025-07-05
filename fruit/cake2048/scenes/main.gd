@@ -23,6 +23,8 @@ func _ready() -> void:
 	print("main ready")
 	init_chess_data()
 	render_chess()
+	var answer = log(16) / log(2)
+	print(answer)
 	
 func _input(event: InputEvent):
 	if event is InputEventScreenTouch:
@@ -53,11 +55,11 @@ func render_chess():
 	if pos.x < 0 or pos.y < 0:
 		return
 	var piece_ins = PIECE_ITEM.instantiate()
-	piece_ins.set_txt_value(pos, val)
+	piece_ins.set_cell_value(pos, val)
 	piece_con.add_child(piece_ins)
 	# 设置棋子数据	
 	chess_data[pos.x][pos.y] = {
-		"chess": 'piece_ins', # piece_ins
+		"chess": piece_ins,
 		"pos": pos,
 		"val": val
 	}
@@ -114,6 +116,9 @@ func handle_chess_move():
 		chess_left_move();
 	if touch_direction == Dir.Right:
 		chess_right_move();
+	var tween = create_tween()
+	tween.tween_interval(0.2)  # 延迟0.2秒
+	tween.tween_callback(render_chess)
 		
 
 func chess_top_move():
@@ -122,7 +127,7 @@ func chess_top_move():
 		var y = 0
 		
 		while y < chess_data[x].size():
-			# 从 y + 1 位置开始，向右查找
+			# 从 y + 1 位置开始，向下查找
 			var next = y + 1
 			while next < chess_data[x].size():
 				# 如果 next 单元格是 0，找下一个不是 0 的单元格
@@ -132,25 +137,38 @@ func chess_top_move():
 				# 如果 y 数字是 0，则将 next 移动到 y 位置，然后将 y 减 1 重新查找
 				if chess_data[x][y].val == 0:
 					chess_move({"from":chess_data[x][next],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val = chess_data[x][next].val
-					chess_data[x][next].chess = null;
-					chess_data[x][next].val = 0
 					y-=1
 				# 如果 y 与 next 单元格数字相等，则将 next 移动并合并给 y
 				elif chess_data[x][y].val == chess_data[x][next].val:
 					chess_merge({"from":chess_data[x][next],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val += chess_data[x][next].val
-					chess_data[x][next].chess = null;
-					chess_data[x][next].val = 0
 				break
 			y+=1	
 	print_chess_num()
 				
 
 func chess_bottom_move():
-	pass
+	print_chess_num()
+	for x in chess_data.size():
+		var y = Chess_Column - 1
+		
+		while y >= 0:
+			# 从 y - 1 位置开始，向上查找
+			var pre = y - 1
+			while pre >= 0:
+				# 如果 pre 单元格是 0，找下一个不是 0 的单元格
+				if chess_data[x][pre].val == 0:
+					pre -= 1
+					continue
+				# 如果 y 数字是 0，则将 pre 移动到 y 位置，然后将 y 加 1 重新查找
+				if chess_data[x][y].val == 0:
+					chess_move({"from":chess_data[x][pre],"to": chess_data[x][y]})
+					y+=1
+				# 如果 y 与 pre 单元格数字相等，则将 pre 移动并合并给 y
+				elif chess_data[x][y].val == chess_data[x][pre].val:
+					chess_merge({"from": chess_data[x][pre],"to": chess_data[x][y]})
+				break
+			y-=1	
+	print_chess_num()
 	
 
 # 左滑
@@ -166,17 +184,9 @@ func chess_left_move():
 					continue
 				if chess_data[x][y].val == 0:
 					chess_move({"from":chess_data[next][y],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val = chess_data[next][y].val
-					chess_data[next][y].chess = null;
-					chess_data[next][y].val = 0
 					x-=1
-				elif chess_data[x][y].val == chess_data[next][x].val:
+				elif chess_data[x][y].val == chess_data[next][y].val:
 					chess_merge({"from":chess_data[next][y],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val += chess_data[next][y].val
-					chess_data[next][y].chess = null;
-					chess_data[next][y].val = 0
 				break
 			x+=1
 		
@@ -194,17 +204,9 @@ func chess_right_move():
 					continue
 				if chess_data[x][y].val == 0:
 					chess_move({"from":chess_data[pre][y],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val = chess_data[pre][y].val
-					chess_data[pre][y].chess = null;
-					chess_data[pre][y].val = 0
 					x+=1
-				elif chess_data[x][y].val == chess_data[pre][x].val:
+				elif chess_data[x][y].val == chess_data[pre][y].val:
 					chess_merge({"from":chess_data[pre][y],"to": chess_data[x][y]})
-					# 数据更新
-					chess_data[x][y].val += chess_data[pre][y].val
-					chess_data[pre][y].chess = null;
-					chess_data[pre][y].val = 0
 				break
 			x-=1
 	print_chess_num()
@@ -217,12 +219,33 @@ func print_chess_num():
 		for y in chess_data[x].size():
 			new_arr.append(chess_data[y][x].val)
 		tempNum.append(new_arr)
-	print(tempNum)
+	#print(tempNum)
 	
 # 棋子移动
 func chess_move(chessJson):
-	print("chess_move: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"moveTo",chessJson.to.val)
+	var fromJson = chessJson.from
+	var toJson = chessJson.to
+	if not fromJson.chess:
+		return
+	fromJson.chess.move_pos(toJson.pos)
+	#print("chess_move: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"moveTo",chessJson.to.val)
+	# 数据更新
+	chess_data[toJson.pos.x][toJson.pos.y].val = fromJson.val
+	chess_data[toJson.pos.x][toJson.pos.y].chess = fromJson.chess
+	chess_data[fromJson.pos.x][fromJson.pos.y].val = 0
+	chess_data[fromJson.pos.x][fromJson.pos.y].chess = null
+	
+	
 
 # 合并棋子处理
 func chess_merge(chessJson):
-	print("chess_merge: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"mergeTo",chessJson.to.val)
+	var fromJson = chessJson.from
+	var toJson = chessJson.to
+	fromJson.chess.move_pos(toJson.pos,true)
+	var calcSum = fromJson.val + toJson.val
+	toJson.chess.set_text(calcSum)
+	#print("chess_merge: ",chessJson.from.pos,chessJson.to.pos," -- ",chessJson.from.val,"mergeTo",chessJson.to.val)
+	# 数据更新
+	chess_data[toJson.pos.x][toJson.pos.y].val = calcSum
+	chess_data[fromJson.pos.x][fromJson.pos.y].chess = null;
+	chess_data[fromJson.pos.x][fromJson.pos.y].val = 0

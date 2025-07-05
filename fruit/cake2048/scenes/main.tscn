@@ -29,6 +29,7 @@ size_flags_vertical = 4
 color = Color(0.984314, 0.972549, 0.937255, 1)
 
 [node name="TextNum" type="Label" parent="MainCon/BG"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.024
