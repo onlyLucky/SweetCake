@@ -1,6 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvd2wya8ga5ss"]
+[gd_scene load_steps=6 format=3 uid="uid://cvd2wya8ga5ss"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_b68xw"]
+
+[sub_resource type="Theme" id="Theme_pcfak"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0epd5"]
+bg_color = Color(0.741176, 0.584314, 0.443137, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkiml"]
 bg_color = Color(0.729412, 0.682353, 0.627451, 1)
@@ -28,18 +37,58 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.984314, 0.972549, 0.937255, 1)
 
-[node name="TextNum" type="Label" parent="MainCon/BG"]
+[node name="TopCon" type="HBoxContainer" parent="MainCon/BG"]
+layout_direction = 2
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.024
-offset_top = 133.0
-offset_right = -25.92
-offset_bottom = 237.0
+anchor_top = 0.066
+anchor_right = 1.0
+anchor_bottom = 0.16
+offset_left = 60.0
+offset_top = 0.279999
+offset_right = -60.0
+offset_bottom = -0.200012
 grow_horizontal = 2
+theme_override_constants/separation = 500
+alignment = 1
+
+[node name="Score" type="Panel" parent="MainCon/BG/TopCon"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Title" type="Label" parent="MainCon/BG/TopCon/Score"]
+layout_mode = 2
+offset_left = 31.0
+offset_top = -23.0
+offset_right = 151.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.4, 0.368627, 0.333333, 1)
+theme_override_font_sizes/font_size = 60
+text = "分数"
+
+[node name="TextNum" type="Label" parent="MainCon/BG/TopCon/Score"]
+layout_mode = 2
+offset_left = -65.0
+offset_top = 63.0
+offset_right = 232.0
+offset_bottom = 200.0
 theme_override_colors/font_color = Color(0.4, 0.368627, 0.333333, 1)
 theme_override_font_sizes/font_size = 100
+text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Restart" type="Button" parent="MainCon/BG/TopCon"]
+custom_minimum_size = Vector2(260, 140)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme = SubResource("Theme_pcfak")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 46
+theme_override_styles/normal = SubResource("StyleBoxFlat_0epd5")
+text = "重新开始"
 
 [node name="ChessBox" type="MarginContainer" parent="MainCon/BG"]
 layout_mode = 1
@@ -189,13 +238,4 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wcm55")
 [node name="PieceCon" type="Control" parent="MainCon/BG/ChessBox/ChessBorad/ChessBoardMargin"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MainCon/BG"]
-layout_mode = 0
-offset_left = 396.0
-offset_top = 1668.0
-offset_right = 668.0
-offset_bottom = 1804.0
-theme_override_font_sizes/font_size = 40
-text = "重新开始"
-
-[connection signal="pressed" from="MainCon/BG/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="MainCon/BG/TopCon/Restart" to="." method="_on_button_pressed"]

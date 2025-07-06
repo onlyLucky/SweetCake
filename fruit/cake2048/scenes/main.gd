@@ -3,7 +3,8 @@ extends Node2D
 const PIECE_ITEM = preload("res://scenes/PieceItem.tscn")
 
 @onready var piece_con: Control = $MainCon/BG/ChessBox/ChessBorad/ChessBoardMargin/PieceCon
-@onready var score_text: Label = $MainCon/BG/TextNum
+
+@onready var score_text: Label = $MainCon/BG/TopCon/Score/TextNum
 
 #限制距离
 var limit_value:float = 150.0
