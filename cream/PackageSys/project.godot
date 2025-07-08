@@ -20,11 +20,15 @@ config/icon="res://icon.svg"
 window/size/viewport_width=1080
 window/size/viewport_height=1920
 window/size/always_on_top=true
-window/size/window_width_override=274
-window/size/window_height_override=584
+window/size/window_width_override=270
+window/size/window_height_override=480
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
 window/handheld/orientation=1
+
+[gui]
+
+theme/custom_font="res://themes/font_misans.tres"
 
 [input_devices]
 

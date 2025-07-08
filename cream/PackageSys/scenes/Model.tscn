@@ -1,0 +1,112 @@
+[gd_scene load_steps=7 format=3 uid="uid://c756dk4y72q4f"]
+
+[ext_resource type="Shader" path="res://shaders/blur_shader.gdshader" id="1_3bbj3"]
+[ext_resource type="Texture2D" uid="uid://d0ab08r3l8iu2" path="res://resource/images/bg.png" id="1_y53br"]
+[ext_resource type="FontFile" uid="uid://bw7hbkhtdd08s" path="res://resource/fonts/MiSans-Normal.otf" id="3_tuy60"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1wiqu"]
+shader = ExtResource("1_3bbj3")
+shader_parameter/blur_radius = 50.0
+shader_parameter/alpha = 1.0
+shader_parameter/quality = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bajes"]
+bg_color = Color(0.0196078, 0.0941176, 0.14902, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77vvb"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[node name="Model" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_1wiqu")
+offset_right = 1080.0
+offset_bottom = 1920.0
+texture = ExtResource("1_y53br")
+
+[node name="Mask" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.207843, 0.231373, 0.25098, 1)
+metadata/_edit_lock_ = true
+
+[node name="ModelCon" type="Control" parent="Mask"]
+layout_mode = 1
+anchor_left = 0.092
+anchor_top = 0.3
+anchor_right = 0.908
+anchor_bottom = 0.7
+offset_left = 0.139992
+offset_top = 0.5
+offset_right = -0.140076
+offset_bottom = -0.500122
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModelPanel" type="Panel" parent="Mask/ModelCon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bajes")
+
+[node name="Header" type="Panel" parent="Mask/ModelCon/ModelPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_77vvb")
+
+[node name="Title" type="Label" parent="Mask/ModelCon/ModelPanel/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.156863, 0.156863, 0.14902, 1)
+theme_override_fonts/font = ExtResource("3_tuy60")
+theme_override_font_sizes/font_size = 46
+text = "提示"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Mask/ModelCon/ModelPanel/Header"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -370.0
+offset_top = 104.0
+offset_right = 370.0
+offset_bottom = 546.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[center]检测到存在更新，大小为2261.73m。
+当前为[color=green]WIFI[/color]网络环境，是否更新？
+*点击取消会退出游戏[center]"
