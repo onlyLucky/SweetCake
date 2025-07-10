@@ -1,4 +1,51 @@
-[gd_scene format=3 uid="uid://xufri4uvq1lu"]
+[gd_scene load_steps=13 format=3 uid="uid://xufri4uvq1lu"]
+
+[ext_resource type="Shader" path="res://shaders/stripes.gdshader" id="1_q5l6u"]
+[ext_resource type="Texture2D" uid="uid://bvfoixjxklenf" path="res://resource/icons/props.png" id="2_sgec5"]
+[ext_resource type="Texture2D" uid="uid://bs46stqijf11e" path="res://resource/icons/pull.png" id="3_ntp2c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ixa5j"]
+shader = ExtResource("1_q5l6u")
+shader_parameter/angle = 8.0
+shader_parameter/width = 0.02
+shader_parameter/softness = 0.0
+shader_parameter/color_a = Color(0.027451, 0.0980392, 0.145098, 1)
+shader_parameter/color_b = Color(0.117647, 0.184314, 0.223529, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_by3lu"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i04pa"]
+bg_color = Color(0.0117647, 0.0666667, 0.101961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7ysh"]
+bg_color = Color(0.0235294, 0.101961, 0.14902, 0.396078)
+
+[sub_resource type="Theme" id="Theme_18e1a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ik2s"]
+bg_color = Color(0.803922, 0.819608, 0.831373, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7md6x"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nl3r0"]
+bg_color = Color(0, 0, 0.00392157, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ulq46"]
+bg_color = Color(0.243137, 0.27451, 0.309804, 1)
 
 [node name="Package" type="Control"]
 layout_mode = 3
@@ -7,3 +54,179 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Header" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_ixa5j")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 120.0
+grow_horizontal = 2
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 240.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_by3lu")
+text = "背包"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 120.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i04pa")
+
+[node name="ConHeader" type="Panel" parent="Content"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a7ysh")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="HConBox" type="Control" parent="Content/ConHeader"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 55.0
+offset_right = -55.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeaderLeft" type="HBoxContainer" parent="Content/ConHeader/HConBox"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Icon" type="Panel" parent="Content/ConHeader/HConBox/HeaderLeft"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_18e1a")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ik2s")
+
+[node name="Props" type="Sprite2D" parent="Content/ConHeader/HConBox/HeaderLeft/Icon"]
+position = Vector2(30, 30)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_sgec5")
+
+[node name="Label" type="Label" parent="Content/ConHeader/HConBox/HeaderLeft"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "心彩数量：1/1500"
+
+[node name="HeaderRight" type="HBoxContainer" parent="Content/ConHeader/HConBox"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="FilterCon" type="Panel" parent="Content/ConHeader/HConBox/HeaderRight"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7md6x")
+
+[node name="Arrow" type="Panel" parent="Content/ConHeader/HConBox/HeaderRight/FilterCon"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = -28.0
+offset_right = -2.0
+offset_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nl3r0")
+
+[node name="Pull" type="Sprite2D" parent="Content/ConHeader/HConBox/HeaderRight/FilterCon/Arrow"]
+position = Vector2(29, 29)
+scale = Vector2(0.231694, 0.231694)
+texture = ExtResource("3_ntp2c")
+
+[node name="Label" type="Label" parent="Content/ConHeader/HConBox/HeaderRight/FilterCon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 22
+text = "稀有度"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="Content"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -413.0
+offset_top = -571.5
+offset_right = -293.0
+offset_bottom = -529.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "选择"
+item_count = 2
+popup/item_0/text = "111111"
+popup/item_1/text = "2222222"
+popup/item_1/id = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Content"]
+layout_mode = 0
+offset_left = 1.0
+offset_right = 1081.0
+offset_bottom = 1383.0
+
+[node name="Footer" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ulq46")

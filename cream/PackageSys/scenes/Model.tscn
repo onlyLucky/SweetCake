@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c756dk4y72q4f"]
+[gd_scene load_steps=9 format=3 uid="uid://c756dk4y72q4f"]
 
 [ext_resource type="Shader" path="res://shaders/blur_shader.gdshader" id="1_3bbj3"]
 [ext_resource type="Texture2D" uid="uid://d0ab08r3l8iu2" path="res://resource/images/bg.png" id="1_y53br"]
@@ -22,6 +22,22 @@ bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meull"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.14, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wddyf"]
+bg_color = Color(1, 0.513726, 0.376471, 1)
+skew = Vector2(0.14, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [node name="Model" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -33,6 +49,7 @@ grow_vertical = 2
 [node name="BG" type="TextureRect" parent="."]
 visible = false
 material = SubResource("ShaderMaterial_1wiqu")
+layout_mode = 0
 offset_right = 1080.0
 offset_bottom = 1920.0
 texture = ExtResource("1_y53br")
@@ -52,11 +69,11 @@ layout_mode = 1
 anchor_left = 0.092
 anchor_top = 0.3
 anchor_right = 0.908
-anchor_bottom = 0.7
-offset_left = 0.139992
-offset_top = 0.5
-offset_right = -0.140076
-offset_bottom = -0.500122
+anchor_bottom = 0.652
+offset_left = -0.360008
+offset_top = 1.0
+offset_right = -0.640015
+offset_bottom = 0.160034
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -84,29 +101,82 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.156863, 0.156863, 0.14902, 1)
+theme_override_colors/font_color = Color(0.156863, 0.156863, 0.156863, 1)
 theme_override_fonts/font = ExtResource("3_tuy60")
 theme_override_font_sizes/font_size = 46
 text = "提示"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Mask/ModelCon/ModelPanel/Header"]
+[node name="Container" type="ScrollContainer" parent="Mask/ModelCon/ModelPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -370.0
-offset_top = 104.0
-offset_right = 370.0
-offset_bottom = 546.0
+offset_left = -403.5
+offset_top = -204.5
+offset_right = 403.5
+offset_bottom = 181.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ModelRichTxt" type="RichTextLabel" parent="Mask/ModelCon/ModelPanel/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
-text = "[center]检测到存在更新，大小为2261.73m。
-当前为[color=green]WIFI[/color]网络环境，是否更新？
-*点击取消会退出游戏[center]"
+text = "[center] 
+[p align=c][font bt=14 ] 检测到存在更新，大小为2261.73m。[/font][/p]
+[p align=c][font bt=14 ]当前为[color=green]WIFI[/color]网络环境，是否更新？[/font][/p]
+[p align=c][font bt=20 ]*点击取消会退出游戏 [/font][/p]
+[/center]"
+
+[node name="OptBox" type="Control" parent="Mask/ModelCon/ModelPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 39.0
+offset_top = -128.0
+offset_right = -39.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Cancel" type="Button" parent="Mask/ModelCon/ModelPanel/OptBox"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -45.0
+offset_right = 390.0
+offset_bottom = 25.0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.156863, 0.156863, 0.156863, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_meull")
+text = "取消"
+
+[node name="Commit" type="Button" parent="Mask/ModelCon/ModelPanel/OptBox"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -390.0
+offset_top = -45.0
+offset_bottom = 25.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.156863, 0.156863, 0.156863, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_wddyf")
+text = "确认"
