@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://thghlq82q1cx"]
+
+[ext_resource type="Script" path="res://scenes/card_item.gd" id="1_p06fo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmupp"]
+bg_color = Color(0.329412, 0.329412, 0.329412, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.47788, 0.47788, 0.47788, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kxhe"]
+bg_color = Color(0.999998, 0.571454, 0.505819, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CardItem" type="Node2D"]
+script = ExtResource("1_p06fo")
+
+[node name="CardCon" type="Panel" parent="."]
+offset_right = 100.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nmupp")
+
+[node name="Name" type="Label" parent="CardCon"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 30.0
+offset_right = 99.0
+offset_bottom = 68.0
+theme_override_font_sizes/font_size = 22
+text = "兔子"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Level" type="Label" parent="CardCon"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 97.0
+offset_bottom = 26.0
+theme_override_colors/font_color = Color(1, 0.695615, 0.644467, 1)
+theme_override_font_sizes/font_size = 16
+text = "Lv 1"
+text_overrun_behavior = 3
+
+[node name="State" type="Label" parent="CardCon"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 72.0
+offset_right = 98.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0.674815, 0.674815, 0.674815, 1)
+theme_override_font_sizes/font_size = 14
+text = "受伤"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ExpBar" type="ProgressBar" parent="CardCon"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 113.0
+offset_right = 98.0
+offset_bottom = 117.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_3kxhe")
+value = 52.0
+show_percentage = false
