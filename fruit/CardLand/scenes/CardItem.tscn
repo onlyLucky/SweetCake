@@ -21,7 +21,11 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="CardItem" type="Node2D"]
+[node name="CardItem" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 120.0
 script = ExtResource("1_p06fo")
 
 [node name="CardCon" type="Panel" parent="."]
