@@ -50,9 +50,3 @@ offset_left = 40.0
 offset_top = 40.0
 offset_right = 140.0
 offset_bottom = 160.0
-
-[node name="CardItem2" parent="CardBox" instance=ExtResource("1_w7ou6")]
-offset_left = 377.0
-offset_top = 95.0
-offset_right = 477.0
-offset_bottom = 215.0
