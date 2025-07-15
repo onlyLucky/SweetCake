@@ -29,6 +29,7 @@ offset_bottom = 120.0
 script = ExtResource("1_p06fo")
 
 [node name="CardCon" type="Panel" parent="."]
+layout_mode = 0
 offset_right = 100.0
 offset_bottom = 120.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_nmupp")

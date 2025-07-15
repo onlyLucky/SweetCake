@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://p5qn2meem1ki"]
+[gd_scene load_steps=4 format=3 uid="uid://p5qn2meem1ki"]
 
 [ext_resource type="PackedScene" uid="uid://thghlq82q1cx" path="res://scenes/CardItem.tscn" id="1_w7ou6"]
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_xxr4p"]
+[ext_resource type="Script" path="res://scripts/dragBox.gd" id="2_cveqq"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -11,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_xxr4p")
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1
@@ -45,8 +48,35 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.114897, 0.114897, 0.114897, 1)
 
-[node name="CardItem" parent="CardBox" instance=ExtResource("1_w7ou6")]
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 140.0
-offset_bottom = 160.0
+[node name="CardParents" type="Control" parent="CardBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_cveqq")
+
+[node name="CardItem" parent="CardBox/CardParents" instance=ExtResource("1_w7ou6")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 89.0
+offset_top = 43.0
+offset_right = -683.0
+offset_bottom = -485.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CardItem2" parent="CardBox/CardParents" instance=ExtResource("1_w7ou6")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 271.0
+offset_top = 61.0
+offset_right = -501.0
+offset_bottom = -467.0
+grow_horizontal = 2
+grow_vertical = 2
