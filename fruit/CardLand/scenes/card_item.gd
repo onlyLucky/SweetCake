@@ -14,10 +14,12 @@ const SexBar = ["#ff9281","6e9eff"]
 
 
 var is_dragging := false
-var velocity := Vector2.ZERO
 var start_position := Vector2()
 var boundary_rect := Rect2()
 var drag_offset := Vector2.ZERO #点击位置偏移
+
+var velocity := Vector2.ZERO  # 初始移动速度
+var bounce_factor := 0.8  # 回弹衰减系数 (0~1)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -26,9 +28,14 @@ func _ready() -> void:
 	start_position = position
 	boundary_rect = Rect2(Vector2(0,0), get_parent().size)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(delta):
+	# todo 回弹效果监测 进行加速度处理
 	pass
+
+# 添加弹性动画效果 
+func add_bounce_effect():
+	var tween = create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector2(1, 1), 0.5).from(Vector2(0.9, 1.1))
 	
 	
 # 设置位移

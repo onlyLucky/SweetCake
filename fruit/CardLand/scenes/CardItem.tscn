@@ -22,6 +22,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [node name="CardItem" type="Control"]
+z_index = 1
 layout_mode = 3
 anchors_preset = 0
 offset_right = 100.0
