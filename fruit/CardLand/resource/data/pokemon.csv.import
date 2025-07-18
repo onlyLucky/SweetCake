@@ -1,0 +1,15 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b1nw4ntly3edn"
+valid=false
+
+[deps]
+
+source_file="res://resource/data/pokemon.csv"
+
+[params]
+
+compress=true
+delimiter=0

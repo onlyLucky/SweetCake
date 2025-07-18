@@ -24,7 +24,6 @@ var bounce_factor := 0.8  # 回弹衰减系数 (0~1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("_ready_ready")
 	start_position = position
 	boundary_rect = Rect2(Vector2(0,0), get_parent().size)
 

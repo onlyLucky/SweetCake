@@ -10,6 +10,7 @@ var cur_card_pos := Vector2.ZERO #当前卡片位置信息
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("_ready drag",size)
 	pass # Replace with function body.
 
 
@@ -51,8 +52,16 @@ func _card_darg_input(event: InputEvent) -> void:
 		# get_global_transform().get_scale() 获取控件当前的全局缩放比例
 		var drag_offset = start_position - get_local_mouse_position()
 		var target_pos = cur_card.s_pos - drag_offset
-		var move_pos = get_global_transform().affine_inverse() * target_pos
+		if target_pos.x<=0:
+			target_pos.x = 0
+		if target_pos.y<=0:
+			target_pos.y = 0
+		
 		if cur_card.target:
+			if target_pos.x>=size.x-cur_card.target.size.x:
+				target_pos.x = size.x-cur_card.target.size.x
+			if target_pos.y >= size.y-cur_card.target.size.y:
+				target_pos.y = size.y-cur_card.target.size.y
 			cur_card.target.set_move_pos(target_pos)
 			cur_card.target._check_boundary()
 			
