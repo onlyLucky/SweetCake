@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://6gk6ioavwo0s"]
+[gd_scene load_steps=9 format=3 uid="uid://6gk6ioavwo0s"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_4s2g4"]
 [ext_resource type="Texture2D" uid="uid://cesi1q4qqyxqm" path="res://Graphics/Snake_spritesheet.png" id="1_aoqv0"]
 [ext_resource type="Texture2D" uid="uid://dt3esnnme03gw" path="res://Graphics/front.png" id="2_yjn5n"]
+[ext_resource type="Texture2D" uid="uid://cll7m1ow8kflv" path="res://Graphics/grass.png" id="2_yn8yd"]
 [ext_resource type="Texture2D" uid="uid://bwusa7kxgvbmj" path="res://Graphics/apple.png" id="3_kr4f8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yrx3e"]
@@ -37,6 +38,14 @@ sources/1 = SubResource("TileSetAtlasSource_h4r72")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4s2g4")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 840.0
+offset_bottom = 840.0
+texture = ExtResource("2_yn8yd")
+stretch_mode = 1
 
 [node name="SnakeApple" type="TileMapLayer" parent="."]
 position = Vector2(40, 40)

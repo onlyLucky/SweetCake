@@ -32,8 +32,58 @@ func draw_apple():
 
 # 画蛇
 func draw_snack():
-	for black in snake_body:
-		snake_apple.set_cell(black,MAP_TYPE.SNACKE,Vector2i(7,0))
+	for block_index in snake_body.size():
+		var block: Vector2i = snake_body[block_index]
+		var tile_pos: Vector2i = Vector2i(7,0)
+		# 头
+		if block_index == 0:
+			match snake_direction:
+				Vector2i.LEFT:
+					tile_pos = Vector2i(3,1)
+				Vector2i.RIGHT:
+					tile_pos = Vector2i(2,0)
+				Vector2i.UP:
+					tile_pos = Vector2i(2,1)
+				Vector2i.DOWN:
+					tile_pos = Vector2i(3,0)
+		# 尾
+		elif block_index == snake_body.size() - 1:
+			var tail_direction = snake_body[-2] - snake_body[-1]
+			match tail_direction:
+				Vector2i.LEFT:
+					tile_pos = Vector2i(1,0)
+				Vector2i.RIGHT:
+					tile_pos = Vector2i(0,0)
+				Vector2i.UP:
+					tile_pos = Vector2i(1,1)
+				Vector2i.DOWN:
+					tile_pos = Vector2i(0,1)
+		else:
+			var pre_diff: Vector2i = snake_body[block_index - 1] - block
+			var next_diff: Vector2i = snake_body[block_index + 1] - block
+			# 前块与后块差值 垂直移动
+			if pre_diff.x == next_diff.x:
+				tile_pos = Vector2i(4,1)
+			# 前块与后块差值 水平移动
+			if pre_diff.y == next_diff.y:
+				tile_pos = Vector2i(4,0)
+			
+			# 转角
+			# (5,11) (5,10) (6,10) 计算前一个与后一个差值计算比较，转角判断
+			# 左下转
+			if (pre_diff.x == 1 and next_diff.y == 1) or (next_diff.x == 1 and pre_diff.y == 1):
+				tile_pos = Vector2i(5,0)
+			# 下左转	
+			if (pre_diff.x == -1 and next_diff.y == -1) or (next_diff.x == -1 and pre_diff.y == -1):
+				tile_pos = Vector2i(6,1)
+			# 右下转
+			if (pre_diff.x == -1 and next_diff.y == 1) or (next_diff.x == -1 and pre_diff.y == 1):
+				tile_pos = Vector2i(6,0)
+			# 下右转
+			if (pre_diff.x == 1 and next_diff.y == -1) or (next_diff.x == 1 and pre_diff.y == -1):
+				tile_pos = Vector2i(5,1)
+			
+		snake_apple.set_cell(block,MAP_TYPE.SNACKE,tile_pos)
 
 # 定时器绑定
 func _on_snake_tick_timeout() -> void:
