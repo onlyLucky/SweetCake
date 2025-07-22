@@ -13,6 +13,9 @@ var snake_direction: Vector2i = Vector2i.RIGHT
 # 是否吃了苹果
 var eaten_apple: bool=false
 
+var _last_direction_change_time := 0.0
+var _direction_change_cooldown := 0.15  # 150毫秒冷却时间（可根据手感调整）
+
 func _ready() -> void:
 	apple_pos = place_apple()
 	draw_apple()
@@ -113,14 +116,23 @@ func delete_tiles():
 
 # 检测方向输入
 func _input(event: InputEvent) -> void:
+	var current_time = Time.get_ticks_msec() / 1000.0
+	if current_time - _last_direction_change_time < _direction_change_cooldown:
+		return
+	
+	var new_direction := snake_direction
 	if Input.is_action_just_pressed("ui_up") and snake_direction != Vector2i.DOWN:
-		snake_direction = Vector2i.UP
+		new_direction = Vector2i.UP
 	if Input.is_action_just_pressed("ui_down") and snake_direction != Vector2i.UP:
-		snake_direction = Vector2i.DOWN
+		new_direction = Vector2i.DOWN
 	if Input.is_action_just_pressed("ui_left") and snake_direction != Vector2i.RIGHT:
-		snake_direction = Vector2i.LEFT
+		new_direction = Vector2i.LEFT
 	if Input.is_action_just_pressed("ui_right") and snake_direction != Vector2i.LEFT:
-		snake_direction = Vector2i.RIGHT
+		new_direction = Vector2i.RIGHT
+	
+	if new_direction != snake_direction:
+		snake_direction = new_direction
+		_last_direction_change_time = current_time
 
 # 检测苹果是否被吃掉了
 func check_apple_eaten():
