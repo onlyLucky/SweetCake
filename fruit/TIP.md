@@ -36,6 +36,11 @@
 
 ### [贪吃蛇](../fruit/GreedySnake/)
 
+### [街机对战](../fruit/ArcadeBattle/)
+
+[github 教程代码](https://github.com/nicolasbize/fists-of-fury-course)
+
+
 
 **📚资料素材（参考）**
 

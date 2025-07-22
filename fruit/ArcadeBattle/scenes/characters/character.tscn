@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c64hy0yoesk81"]
+
+[ext_resource type="Script" path="res://scenes/characters/character.gd" id="1_sb58h"]
+[ext_resource type="Texture2D" uid="uid://dko0vxkxsasvo" path="res://assets/art/characters/shadow.png" id="2_1v0ig"]
+
+[node name="Character" type="CharacterBody2D"]
+script = ExtResource("1_sb58h")
+speed = 10.0
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_1v0ig")
+centered = false
+offset = Vector2(-7, 0)
+
+[node name="CharacterSprite" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
