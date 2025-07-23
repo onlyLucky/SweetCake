@@ -7,7 +7,7 @@ extends CharacterBody2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var character_sprite: Sprite2D = $CharacterSprite
 
-enum State {IDLE, WALK}
+enum State {IDLE, WALK,ATTACK}
 
 var state = State.IDLE
 
@@ -45,6 +45,10 @@ func handle_input() -> void:
 	#position += direction * delta * speed
 	velocity = direction * speed
 	
+	# 检测是否触发攻击键
+	if can_attack() and Input.is_action_just_pressed("attack"):
+		state = State.ATTACK
+	
 func handle_animations()->void:
 	if state == State.IDLE:
 		animation_player.play("idle")
@@ -57,3 +61,11 @@ func flip_sprites() -> void:
 		character_sprite.flip_h = false
 	elif velocity.x < 0:
 		character_sprite.flip_h = true
+
+# 是否能移动
+func can_move() -> bool:
+	return state == State.IDLE or state == State.WALK
+
+# 是否能攻击
+func can_attack() -> bool:
+	return state == State.IDLE or state == State.WALK
