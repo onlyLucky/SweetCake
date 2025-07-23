@@ -28,7 +28,7 @@ func on_receive_damage(damage:int, direction: Vector2)->void:
 	if state == State.IDLE:
 		# 桶被抛起
 		sprite_2d.frame = 1
-		height_speed = knockback_intesity*3
+		height_speed = knockback_intesity*2
 		state = State.DESTROYED
 		velocity = direction * knockback_intesity
 
