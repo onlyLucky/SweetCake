@@ -6,10 +6,14 @@ extends CharacterBody2D
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var character_sprite: Sprite2D = $CharacterSprite
+@onready var damage_emitter: Area2D = $DamageEmitter
 
 enum State {IDLE, WALK,ATTACK}
 
 var state = State.IDLE
+
+func _ready() -> void:
+	damage_emitter.area_entered.connect(on_emit_damage.bind())
 
 # _delta 添加下划线 未使用的参数不报错
 func _process(_delta: float) -> void:
@@ -33,11 +37,14 @@ func _process(_delta: float) -> void:
 	move_and_slide()
 
 func handle_movement():
-	# 速度检测
-	if velocity.length() == 0:
-		state = State.IDLE
+	if can_move():
+		# 速度检测
+		if velocity.length() == 0:
+			state = State.IDLE
+		else:
+			state = State.WALK
 	else:
-		state = State.WALK
+		velocity = Vector2.ZERO
 
 func handle_input() -> void:
 	# 单位向量 (Vector2.DOWN,Vector2.LEFT... 方向移动 对角线速度很快，同样一像素，对角线距离长)
@@ -54,13 +61,17 @@ func handle_animations()->void:
 		animation_player.play("idle")
 	elif state == State.WALK:
 		animation_player.play("walk")
+	elif state == State.ATTACK:
+		animation_player.play("punch")
 
 # 翻转角色
 func flip_sprites() -> void:
 	if velocity.x > 0:
 		character_sprite.flip_h = false
+		damage_emitter.scale.x = 1
 	elif velocity.x < 0:
 		character_sprite.flip_h = true
+		damage_emitter.scale.x = -1
 
 # 是否能移动
 func can_move() -> bool:
@@ -69,3 +80,13 @@ func can_move() -> bool:
 # 是否能攻击
 func can_attack() -> bool:
 	return state == State.IDLE or state == State.WALK
+
+# 重置状态
+func on_action_complete() -> void:
+	state = State.IDLE
+
+func on_emit_damage(damage_receiver: DamageReceiver) -> void:
+	print(damage_receiver)
+	var direction := Vector2.LEFT if damage_receiver.global_position.x<global_position.x else Vector2.RIGHT
+	# 玩家传递给可破坏道具 damage_receiver 信号，附带伤害值
+	damage_receiver.damage_receiver.emit(damage,direction)
