@@ -1,11 +1,38 @@
-[gd_scene load_steps=3 format=3 uid="uid://7h33cbox4j2h"]
+[gd_scene load_steps=5 format=3 uid="uid://7h33cbox4j2h"]
 
+[ext_resource type="Script" path="res://world.gd" id="1_kiwei"]
 [ext_resource type="PackedScene" uid="uid://cjydifcbegjxe" path="res://scenes/stage/stage.tscn" id="1_yhvxv"]
 [ext_resource type="PackedScene" uid="uid://c4nndbm0015m" path="res://scenes/characters/player.tscn" id="2_3kqp2"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4f2t3"]
+size = Vector2(6, 64)
+
 [node name="World" type="Node2D"]
+script = ExtResource("1_kiwei")
 
 [node name="Stage" parent="." instance=ExtResource("1_yhvxv")]
 
 [node name="Player" parent="." instance=ExtResource("2_3kqp2")]
 position = Vector2(37, 44)
+collision_layer = 1
+collision_mask = 1
+damage = 0
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(50, 32)
+
+[node name="InvisibleWalls" type="Node2D" parent="Camera"]
+editor_description = "隐形墙壁"
+position = Vector2(-50, -32)
+
+[node name="LeftWall" type="StaticBody2D" parent="Camera/InvisibleWalls"]
+position = Vector2(0, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/LeftWall"]
+shape = SubResource("RectangleShape2D_4f2t3")
+
+[node name="RightWall" type="StaticBody2D" parent="Camera/InvisibleWalls"]
+position = Vector2(100, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/RightWall"]
+shape = SubResource("RectangleShape2D_4f2t3")
