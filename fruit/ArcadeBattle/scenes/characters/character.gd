@@ -1,19 +1,46 @@
+class_name Character
 extends CharacterBody2D
 
+# 重力
+const GRAVITY := 600.0
+
 @export var damage: int
-@export var health: int
+# 跳跃强度
+@export var jump_intensity:float
+# 击退强度
+@export var knockback_intensity: float
+@export var max_health: int
 @export var speed: float
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var character_sprite: Sprite2D = $CharacterSprite
 @onready var damage_emitter: Area2D = $DamageEmitter
+@onready var damage_receiver: DamageReceiver = $DamageReceiver
 
-enum State {IDLE, WALK,ATTACK}
+enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT }
 
+
+var anim_map := {
+	State.IDLE: "idle",
+	State.WALK: "walk",
+	State.ATTACK: "punch",
+	State.TAKEOFF: "takeoff",
+	State.JUMP: "jump",
+	State.LAND: "land",
+	State.JUMPKICK: "jumpkick",
+	State.HURT: "hurt",
+}
+var current_health := 0
+# 跳跃高度
+var height := 0.0
+# 跳跃高度速度
+var height_speed := 0.0
 var state = State.IDLE
 
 func _ready() -> void:
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
+	damage_receiver.damage_receiver.connect(on_receive_damage.bind())
+	current_health = max_health
 
 # _delta 添加下划线 未使用的参数不报错
 func _process(_delta: float) -> void:
@@ -32,10 +59,13 @@ func _process(_delta: float) -> void:
 	handle_input()
 	handle_movement()
 	handle_animations()
+	# 处理空中时间
+	handle_air_time(_delta)
 	flip_sprites()
-	
+	character_sprite.position = Vector2.UP * height
 	move_and_slide()
 
+# 处理移动
 func handle_movement():
 	if can_move():
 		# 速度检测
@@ -43,27 +73,23 @@ func handle_movement():
 			state = State.IDLE
 		else:
 			state = State.WALK
-	else:
-		velocity = Vector2.ZERO
 
 func handle_input() -> void:
-	# 单位向量 (Vector2.DOWN,Vector2.LEFT... 方向移动 对角线速度很快，同样一像素，对角线距离长)
-	var direction := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
-	#position += direction * delta * speed
-	velocity = direction * speed
-	
-	# 检测是否触发攻击键
-	if can_attack() and Input.is_action_just_pressed("attack"):
-		state = State.ATTACK
+	pass
 	
 func handle_animations()->void:
-	if state == State.IDLE:
-		animation_player.play("idle")
-	elif state == State.WALK:
-		animation_player.play("walk")
-	elif state == State.ATTACK:
-		animation_player.play("punch")
+	if animation_player.has_animation(anim_map[state]):
+		animation_player.play(anim_map[state])
 
+func handle_air_time(delta: float)-> void:
+	if state == State.JUMP or state == State.JUMPKICK:
+		height += height_speed * delta
+		if height < 0:
+			height = 0
+			state = State.LAND
+		else: 
+			height_speed -= GRAVITY * delta
+			
 # 翻转角色
 func flip_sprites() -> void:
 	if velocity.x > 0:
@@ -81,9 +107,34 @@ func can_move() -> bool:
 func can_attack() -> bool:
 	return state == State.IDLE or state == State.WALK
 
+# 是否能跳跃
+func can_jump() -> bool:
+	return state == State.IDLE or state == State.WALK
+	
+# 是否能跳踢
+func can_jumpkick() -> bool:
+	return state == State.JUMP
+
 # 重置状态
 func on_action_complete() -> void:
 	state = State.IDLE
+# 起跳切换
+func on_takeoff_complete() -> void:
+	state = State.JUMP
+	height_speed = jump_intensity
+# 落地回调	
+func on_land_complete() -> void:
+	state = State.IDLE
+
+# 角色伤害收信号
+func on_receive_damage(damage: int, direction: Vector2) -> void:
+	current_health = clamp(current_health - damage,0, max_health)
+	if current_health <= 0:
+		queue_free()
+	else:
+		#击退
+		state = State.HURT
+		velocity = direction * knockback_intensity
 
 func on_emit_damage(damage_receiver: DamageReceiver) -> void:
 	print(damage_receiver)

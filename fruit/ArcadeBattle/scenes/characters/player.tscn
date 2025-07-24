@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4nndbm0015m"]
+[gd_scene load_steps=16 format=3 uid="uid://c4nndbm0015m"]
 
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ob2fb"]
+[ext_resource type="Script" path="res://scenes/characters/player.gd" id="2_a7djd"]
 [ext_resource type="Texture2D" uid="uid://br44rfk7nlrtv" path="res://assets/art/characters/player.png" id="2_dg0c6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l806c"]
@@ -113,22 +114,150 @@ tracks/0/keys = {
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
 
+[sub_resource type="Animation" id="Animation_bmqrm"]
+resource_name = "takeoff"
+length = 0.05
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [61]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_takeoff_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a7mux"]
+resource_name = "jump"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [62]
+}
+
+[sub_resource type="Animation" id="Animation_mpnav"]
+resource_name = "land"
+length = 0.05
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [60]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_land_complete"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DamageEmitter:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_pug1s"]
+resource_name = "jumplick"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [63]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_woh43"]
 _data = {
 "RESET": SubResource("Animation_gye88"),
 "idle": SubResource("Animation_rob1d"),
+"jump": SubResource("Animation_a7mux"),
+"jumpkick": SubResource("Animation_pug1s"),
+"land": SubResource("Animation_mpnav"),
 "punch": SubResource("Animation_ca7kw"),
+"takeoff": SubResource("Animation_bmqrm"),
 "walk": SubResource("Animation_snf4l")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8l4me"]
 size = Vector2(10, 6)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vswpi"]
+size = Vector2(8, 8)
+
 [node name="Player" instance=ExtResource("1_ob2fb")]
 collision_layer = 2
 collision_mask = 9
+script = ExtResource("2_a7djd")
 damage = 4
-health = 30
+max_health = 30
 speed = 35.0
 
 [node name="CharacterSprite" parent="." index="1"]
@@ -156,4 +285,12 @@ collision_mask = 96
 position = Vector2(10, 0)
 shape = SubResource("RectangleShape2D_8l4me")
 
+[node name="DamageReceiver" parent="." index="5"]
+position = Vector2(1, -17)
+collision_layer = 16
+
+[node name="CollisionShape2D" parent="DamageReceiver" index="0"]
+shape = SubResource("RectangleShape2D_vswpi")
+
 [editable path="DamageEmitter"]
+[editable path="DamageReceiver"]
