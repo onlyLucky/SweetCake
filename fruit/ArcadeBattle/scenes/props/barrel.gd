@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 	sprite_2d.position = Vector2.UP * height
 	handle_air_time(delta)
 
-func on_receive_damage(damage:int, direction: Vector2)->void:
+func on_receive_damage(_damage:int, direction: Vector2)->void:
 	if state == State.IDLE:
 		# 桶被抛起
 		sprite_2d.frame = 1

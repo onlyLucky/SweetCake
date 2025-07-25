@@ -17,7 +17,8 @@ const GRAVITY := 600.0
 @onready var damage_emitter: Area2D = $DamageEmitter
 @onready var damage_receiver: DamageReceiver = $DamageReceiver
 
-enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT }
+# fall 下落
+enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED }
 
 
 var anim_map := {
@@ -29,6 +30,8 @@ var anim_map := {
 	State.LAND: "land",
 	State.JUMPKICK: "jumpkick",
 	State.HURT: "hurt",
+	State.FALL: "fall",
+	State.GROUNDED: "grounded",
 }
 var current_health := 0
 # 跳跃高度
@@ -127,8 +130,11 @@ func on_land_complete() -> void:
 	state = State.IDLE
 
 # 角色伤害收信号
-func on_receive_damage(damage: int, direction: Vector2) -> void:
-	current_health = clamp(current_health - damage,0, max_health)
+func on_receive_damage(amount: int, direction: Vector2,hit_type: DamageReceiver.HitType) -> void:
+	current_health = clamp(current_health - amount,0, max_health)
+	# 血量为空 被击倒 立马倒地
+	if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
+		state = State.GROUNDED
 	if current_health <= 0:
 		queue_free()
 	else:
@@ -136,8 +142,10 @@ func on_receive_damage(damage: int, direction: Vector2) -> void:
 		state = State.HURT
 		velocity = direction * knockback_intensity
 
-func on_emit_damage(damage_receiver: DamageReceiver) -> void:
-	print(damage_receiver)
-	var direction := Vector2.LEFT if damage_receiver.global_position.x<global_position.x else Vector2.RIGHT
+func on_emit_damage(receiver: DamageReceiver) -> void:
+	var hit_type = DamageReceiver.HitType.NORMAL
+	var direction := Vector2.LEFT if receiver.global_position.x<global_position.x else Vector2.RIGHT
+	if state == State.JUMPKICK:
+		hit_type = DamageReceiver.HitType.KNOCKDOWN
 	# 玩家传递给可破坏道具 damage_receiver 信号，附带伤害值
-	damage_receiver.damage_receiver.emit(damage,direction)
+	receiver.damage_receiver.emit(damage,direction,hit_type)

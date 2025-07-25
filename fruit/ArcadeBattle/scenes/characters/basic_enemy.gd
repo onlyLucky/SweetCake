@@ -16,5 +16,15 @@ func handle_input()->void:
 			# 向玩家移动
 			# 同一个层级的节点树之下可以使用 position 不在同一层级 可以使用global_position
 			var direction := (player_slot.global_position - global_position).normalized()
-			velocity = direction * speed
-				
+			# 向量相减 取length 是向量的长度
+			if (player_slot.global_position - global_position).length() <= 1:
+				velocity = Vector2.ZERO
+			else:
+				velocity = direction * speed
+
+func on_receive_damage(amount: int, direction: Vector2) -> void:
+	super.on_receive_damage(amount,direction)
+	if current_health == 0:
+		player.free_slot(self)
+	
+	

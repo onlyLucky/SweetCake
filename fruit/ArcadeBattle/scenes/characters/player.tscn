@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ob2fb"]
 [ext_resource type="Script" path="res://scenes/characters/player.gd" id="2_a7djd"]
 [ext_resource type="Texture2D" uid="uid://br44rfk7nlrtv" path="res://assets/art/characters/player.png" id="2_dg0c6"]
-[ext_resource type="PackedScene" uid="uid://b0ysct0igjj8q" path="res://scenes/characters/enemy_slot.tscn" id="4_6ctg0"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemy_slot.tscn" id="4_6ctg0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l806c"]
 radius = 2.0
@@ -258,6 +258,7 @@ collision_layer = 2
 collision_mask = 9
 script = ExtResource("2_a7djd")
 damage = 4
+jump_intensity = 150.0
 max_health = 30
 speed = 35.0
 
