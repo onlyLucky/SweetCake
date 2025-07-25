@@ -9,6 +9,9 @@ const GRAVITY := 600.0
 @export var jump_intensity:float
 # 击退强度
 @export var knockback_intensity: float
+# 击倒强度
+@export var knockdown_intensity: float
+
 @export var max_health: int
 @export var speed: float
 
@@ -134,13 +137,12 @@ func on_receive_damage(amount: int, direction: Vector2,hit_type: DamageReceiver.
 	current_health = clamp(current_health - amount,0, max_health)
 	# 血量为空 被击倒 立马倒地
 	if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
-		state = State.GROUNDED
-	if current_health <= 0:
-		queue_free()
+		state = State.FALL
+		height_speed = knockdown_intensity
 	else:
 		#击退
 		state = State.HURT
-		velocity = direction * knockback_intensity
+	velocity = direction * knockback_intensity
 
 func on_emit_damage(receiver: DamageReceiver) -> void:
 	var hit_type = DamageReceiver.HitType.NORMAL
