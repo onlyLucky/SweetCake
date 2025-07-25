@@ -5,13 +5,14 @@ extends CharacterBody2D
 const GRAVITY := 600.0
 
 @export var damage: int
+# 倒地时间
+@export var duration_grounded: float
 # 跳跃强度
 @export var jump_intensity:float
 # 击退强度
 @export var knockback_intensity: float
 # 击倒强度
 @export var knockdown_intensity: float
-
 @export var max_health: int
 @export var speed: float
 
@@ -19,6 +20,7 @@ const GRAVITY := 600.0
 @onready var character_sprite: Sprite2D = $CharacterSprite
 @onready var damage_emitter: Area2D = $DamageEmitter
 @onready var damage_receiver: DamageReceiver = $DamageReceiver
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 # fall 下落
 enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED }
@@ -42,6 +44,7 @@ var height := 0.0
 # 跳跃高度速度
 var height_speed := 0.0
 var state = State.IDLE
+var time_since_grounded:=Time.get_ticks_msec()
 
 func _ready() -> void:
 	damage_emitter.area_entered.connect(on_emit_damage.bind())
@@ -67,8 +70,11 @@ func _process(_delta: float) -> void:
 	handle_animations()
 	# 处理空中时间
 	handle_air_time(_delta)
+	# 处理地面状态
+	handle_grounded()
 	flip_sprites()
 	character_sprite.position = Vector2.UP * height
+	collision_shape.disabled = state == State.GROUNDED
 	move_and_slide()
 
 # 处理移动
@@ -83,16 +89,25 @@ func handle_movement():
 func handle_input() -> void:
 	pass
 	
+func handle_grounded():
+	if state == State.GROUNDED and (Time.get_ticks_msec() - time_since_grounded > duration_grounded):
+		state = State.LAND
+	
 func handle_animations()->void:
 	if animation_player.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
 
 func handle_air_time(delta: float)-> void:
-	if state == State.JUMP or state == State.JUMPKICK:
+	if [State.JUMP,State.JUMPKICK,State.FALL].has(state):
 		height += height_speed * delta
 		if height < 0:
 			height = 0
-			state = State.LAND
+			if state == State.FALL:
+				state = State.GROUNDED
+				time_since_grounded = Time.get_ticks_msec()
+			else:
+				state = State.LAND
+			velocity = Vector2.ZERO
 		else: 
 			height_speed -= GRAVITY * delta
 			
