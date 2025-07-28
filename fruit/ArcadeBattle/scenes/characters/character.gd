@@ -4,14 +4,16 @@ extends CharacterBody2D
 # 重力
 const GRAVITY := 600.0
 
+## 是否能复活
+@export var can_respawn: bool
 @export var damage: int
-# 倒地时间
+## 倒地时间
 @export var duration_grounded: float
-# 跳跃强度
+## 跳跃强度
 @export var jump_intensity:float
-# 击退强度
+## 击退强度
 @export var knockback_intensity: float
-# 击倒强度
+## 击倒强度
 @export var knockdown_intensity: float
 @export var max_health: int
 @export var speed: float
@@ -23,13 +25,13 @@ const GRAVITY := 600.0
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 # fall 下落
-enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED }
+enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED, DEATH }
 
-
+var anim_attacks := ["punch","punch_alt","kick","roundkick"]
 var anim_map := {
 	State.IDLE: "idle",
 	State.WALK: "walk",
-	State.ATTACK: "punch",
+	#State.ATTACK: "punch",
 	State.TAKEOFF: "takeoff",
 	State.JUMP: "jump",
 	State.LAND: "land",
@@ -37,12 +39,17 @@ var anim_map := {
 	State.HURT: "hurt",
 	State.FALL: "fall",
 	State.GROUNDED: "grounded",
+	State.DEATH: "grounded",
 }
+# 攻击连招 下标
+var attack_combo_index := 0
 var current_health := 0
 # 跳跃高度
 var height := 0.0
 # 跳跃高度速度
 var height_speed := 0.0
+# 最后一击是否成功
+var is_last_hit_successful := false
 var state = State.IDLE
 var time_since_grounded:=Time.get_ticks_msec()
 
@@ -72,6 +79,8 @@ func _process(_delta: float) -> void:
 	handle_air_time(_delta)
 	# 处理地面状态
 	handle_grounded()
+	# 处理死亡处理
+	handle_death(_delta)
 	flip_sprites()
 	character_sprite.position = Vector2.UP * height
 	collision_shape.disabled = state == State.GROUNDED
@@ -91,10 +100,22 @@ func handle_input() -> void:
 	
 func handle_grounded():
 	if state == State.GROUNDED and (Time.get_ticks_msec() - time_since_grounded > duration_grounded):
-		state = State.LAND
+		if current_health == 0:
+			state = State.DEATH
+		else:
+			state = State.LAND
+
+func handle_death(delta: float):
+	if state == State.DEATH and not can_respawn:
+		# 两秒透明度归0
+		modulate.a -= delta / 2.0
+		if modulate.a <= 0:
+			queue_free()
 	
 func handle_animations()->void:
-	if animation_player.has_animation(anim_map[state]):
+	if state == State.ATTACK:
+		animation_player.play(anim_attacks[attack_combo_index])
+	elif animation_player.has_animation(anim_map[state]):
 		animation_player.play(anim_map[state])
 
 func handle_air_time(delta: float)-> void:
@@ -136,6 +157,9 @@ func can_jump() -> bool:
 func can_jumpkick() -> bool:
 	return state == State.JUMP
 
+func can_get_hurt() -> bool:
+	return [State.IDLE, State.WALK, State.TAKEOFF, State.JUMP, State.LAND].has(state)
+
 # 重置状态
 func on_action_complete() -> void:
 	state = State.IDLE
@@ -149,15 +173,16 @@ func on_land_complete() -> void:
 
 # 角色伤害收信号
 func on_receive_damage(amount: int, direction: Vector2,hit_type: DamageReceiver.HitType) -> void:
-	current_health = clamp(current_health - amount,0, max_health)
-	# 血量为空 被击倒 立马倒地
-	if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
-		state = State.FALL
-		height_speed = knockdown_intensity
-	else:
-		#击退
-		state = State.HURT
-	velocity = direction * knockback_intensity
+	if can_get_hurt():
+		current_health = clamp(current_health - amount,0, max_health)
+		# 血量为空 被击倒 立马倒地
+		if current_health == 0 or hit_type == DamageReceiver.HitType.KNOCKDOWN:
+			state = State.FALL
+			height_speed = knockdown_intensity
+		else:
+			#击退
+			state = State.HURT
+		velocity = direction * knockback_intensity
 
 func on_emit_damage(receiver: DamageReceiver) -> void:
 	var hit_type = DamageReceiver.HitType.NORMAL
@@ -166,3 +191,4 @@ func on_emit_damage(receiver: DamageReceiver) -> void:
 		hit_type = DamageReceiver.HitType.KNOCKDOWN
 	# 玩家传递给可破坏道具 damage_receiver 信号，附带伤害值
 	receiver.damage_receiver.emit(damage,direction,hit_type)
+	is_last_hit_successful = true
