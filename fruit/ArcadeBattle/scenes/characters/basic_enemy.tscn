@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b0yvbdw31xhtu"]
+[gd_scene load_steps=17 format=3 uid="uid://b0yvbdw31xhtu"]
 
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ul2aw"]
 [ext_resource type="Script" path="res://scenes/characters/basic_enemy.gd" id="2_1dy7n"]
@@ -22,6 +22,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollateralDamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_o8p08"]
 resource_name = "fall"
@@ -39,6 +51,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [51]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollateralDamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_ox7ys"]
@@ -61,8 +85,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_pa4w6"]
 resource_name = "hurt"
-length = 0.3
-step = 0.1
+length = 0.15
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -70,7 +94,7 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
+"times": PackedFloat32Array(0, 0.05, 0.1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [40, 41, 42]
@@ -82,7 +106,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.3),
+"times": PackedFloat32Array(0.15),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -158,10 +182,41 @@ tracks/0/keys = {
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
 
+[sub_resource type="Animation" id="Animation_44sd1"]
+resource_name = "fly"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [50]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollateralDamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rtueb"]
 _data = {
 "RESET": SubResource("Animation_r5lk2"),
 "fall": SubResource("Animation_o8p08"),
+"fly": SubResource("Animation_44sd1"),
 "grounded": SubResource("Animation_ox7ys"),
 "hurt": SubResource("Animation_pa4w6"),
 "idle": SubResource("Animation_w5ckl"),
@@ -175,13 +230,17 @@ size = Vector2(6, 6)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jkb0g"]
 size = Vector2(10, 10)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wloxd"]
+size = Vector2(6, 6)
+
 [node name="BasicEnemy" instance=ExtResource("1_ul2aw")]
 collision_layer = 4
 collision_mask = 8
 script = ExtResource("2_1dy7n")
 damage = 2
 duration_grounded = 1000.0
-knockback_intensity = 40.0
+fligth_speed = 100.0
+knockback_intensity = 10.0
 knockdown_intensity = 70.0
 max_health = 20
 speed = 25.0
@@ -218,5 +277,14 @@ collision_layer = 32
 [node name="CollisionShape2D" parent="DamageReceiver" index="0"]
 shape = SubResource("RectangleShape2D_jkb0g")
 
+[node name="CollateralDamageEmitter" parent="." index="6"]
+position = Vector2(0, -12)
+collision_mask = 160
+
+[node name="CollisionShape2D" parent="CollateralDamageEmitter" index="0"]
+shape = SubResource("RectangleShape2D_wloxd")
+debug_color = Color(0.939059, 0.677034, 0.216768, 0.42)
+
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]

@@ -23,6 +23,7 @@ gdscript/warnings/unused_signal=0
 
 window/size/viewport_width=100
 window/size/viewport_height=64
+window/size/always_on_top=true
 window/size/window_width_override=1000
 window/size/window_height_override=640
 window/stretch/mode="viewport"
@@ -43,13 +44,14 @@ jump={
 
 [layer_names]
 
-2d_physics/layer_1="World"
-2d_physics/layer_2="Player"
-2d_physics/layer_3="Enemy"
-2d_physics/layer_4="Destructibles"
-2d_physics/layer_5="PlayerDamageReceiver"
-2d_physics/layer_6="EnemyDamageReceiver"
-2d_physics/layer_7="DestructibDamageReceiver"
+2d_physics/layer_1="世界层 World"
+2d_physics/layer_2="玩家层 Player"
+2d_physics/layer_3="敌人层 Enemy"
+2d_physics/layer_4="可损坏道具层 Destructibles"
+2d_physics/layer_5="玩家伤害接收器 PlayerDamageReceiver"
+2d_physics/layer_6="敌人伤害接收器 EnemyDamageReceiver"
+2d_physics/layer_7="可损坏道具伤害接收器 DestructibDamageReceiver"
+2d_physics/layer_8="隐形墙 InvisibleWalls"
 
 [rendering]
 

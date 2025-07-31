@@ -15,20 +15,26 @@ script = ExtResource("1_kiwei")
 [node name="Stage" parent="." instance=ExtResource("1_yhvxv")]
 
 [node name="Camera" type="Camera2D" parent="."]
-position = Vector2(50, 32)
+position = Vector2(55, 32)
 
 [node name="InvisibleWalls" type="Node2D" parent="Camera"]
 editor_description = "隐形墙壁"
 position = Vector2(-50, -32)
 
-[node name="LeftWall" type="StaticBody2D" parent="Camera/InvisibleWalls"]
+[node name="LeftWall" type="AnimatableBody2D" parent="Camera/InvisibleWalls"]
 position = Vector2(0, 32)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/LeftWall"]
 shape = SubResource("RectangleShape2D_4f2t3")
 
-[node name="RightWall" type="StaticBody2D" parent="Camera/InvisibleWalls"]
+[node name="RightWall" type="AnimatableBody2D" parent="Camera/InvisibleWalls"]
 position = Vector2(100, 32)
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera/InvisibleWalls/RightWall"]
 shape = SubResource("RectangleShape2D_4f2t3")

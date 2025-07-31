@@ -26,5 +26,9 @@ offset = Vector2(-7, 0)
 
 [node name="DamageReceiver" parent="." instance=ExtResource("4_s6sf8")]
 
+[node name="CollateralDamageEmitter" parent="." instance=ExtResource("3_5vgxj")]
+editor_description = "伤害连锁发射器（碰撞到其他的敌人，玩家）"
+
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]
+[editable path="CollateralDamageEmitter"]
