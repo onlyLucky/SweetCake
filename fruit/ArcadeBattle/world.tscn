@@ -49,21 +49,6 @@ position = Vector2(37, 44)
 position = Vector2(75, 46)
 
 [node name="BasicEnemy" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
-position = Vector2(15, 59)
+position = Vector2(64, 59)
 player = NodePath("../Player")
-
-[node name="BasicEnemy2" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
-position = Vector2(49, 74)
-player = NodePath("../Player")
-
-[node name="BasicEnemy3" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
-position = Vector2(12, 37)
-player = NodePath("../Player")
-
-[node name="BasicEnemy4" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
-position = Vector2(90, 46)
-player = NodePath("../Player")
-
-[node name="BasicEnemy5" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
-position = Vector2(69, 61)
-player = NodePath("../Player")
+damage = 50

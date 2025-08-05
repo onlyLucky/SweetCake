@@ -1,9 +1,20 @@
 class_name BasicEnemy
 extends Character
 
+## 两次攻击之间间隔时间
+@export var duration_between_hits: int
+## 攻击等待时间
+@export var duration_prep_hit: int
 @export var player: Player
 
 var player_slot: EnemySlot = null
+var time_since_last_hit:=Time.get_ticks_msec()
+var time_since_prep_hit:=Time.get_ticks_msec()
+
+
+func _ready() -> void:
+	super._ready()
+	anim_attacks = ["punch","punch_alt"]
 
 func handle_input()->void:
 	if player != null and can_move():
@@ -17,10 +28,30 @@ func handle_input()->void:
 			# 同一个层级的节点树之下可以使用 position 不在同一层级 可以使用global_position
 			var direction := (player_slot.global_position - global_position).normalized()
 			# 向量相减 取length 是向量的长度
-			if (player_slot.global_position - global_position).length() <= 1:
+			if is_player_within_range():
 				velocity = Vector2.ZERO
+				if can_attack():
+					state = State.PREP_ATTACK
+					time_since_prep_hit = Time.get_ticks_msec()
 			else:
 				velocity = direction * speed
+
+## 处理准备攻击工作
+func handle_prep_attack()->void:
+	if state == State.PREP_ATTACK and (Time.get_ticks_msec() - time_since_prep_hit < duration_prep_hit):
+		state = State.ATTACK
+		time_since_last_hit = Time.get_ticks_msec()
+		#随机打乱数组中所有元素的顺序
+		anim_attacks.shuffle()
+
+## 判断玩家插槽距离 单位有 1
+func is_player_within_range() -> bool:
+	return (player_slot.global_position - global_position).length() < 1
+	
+func can_attack() -> bool:
+	if Time.get_ticks_msec() - time_since_last_hit < duration_between_hits:
+		return false
+	return super.can_attack()
 
 func set_heading():
 	if player == null:

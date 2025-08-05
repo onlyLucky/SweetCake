@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c4nndbm0015m"]
+[gd_scene load_steps=23 format=3 uid="uid://c4nndbm0015m"]
 
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ob2fb"]
 [ext_resource type="Script" path="res://scenes/characters/player.gd" id="2_a7djd"]
@@ -364,9 +364,78 @@ tracks/0/keys = {
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
 
+[sub_resource type="Animation" id="Animation_q28ct"]
+resource_name = "hurt"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [70, 71, 72]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6baav"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+
+[sub_resource type="Animation" id="Animation_fekoy"]
+resource_name = "grounded"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [82]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_woh43"]
 _data = {
 "RESET": SubResource("Animation_gye88"),
+"fall": SubResource("Animation_6baav"),
+"grounded": SubResource("Animation_fekoy"),
+"hurt": SubResource("Animation_q28ct"),
 "idle": SubResource("Animation_rob1d"),
 "jump": SubResource("Animation_a7mux"),
 "jumpkick": SubResource("Animation_pug1s"),
@@ -383,7 +452,7 @@ _data = {
 size = Vector2(10, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vswpi"]
-size = Vector2(8, 8)
+size = Vector2(10, 10)
 
 [node name="Player" instance=ExtResource("1_ob2fb")]
 collision_layer = 2
@@ -392,6 +461,8 @@ script = ExtResource("2_a7djd")
 damage = 4
 damage_power = 6
 jump_intensity = 150.0
+knockback_intensity = 10.0
+knockdown_intensity = 70.0
 max_health = 30
 speed = 35.0
 
@@ -421,7 +492,7 @@ position = Vector2(10, 0)
 shape = SubResource("RectangleShape2D_8l4me")
 
 [node name="DamageReceiver" parent="." index="5"]
-position = Vector2(1, -17)
+position = Vector2(0, -15)
 collision_layer = 16
 
 [node name="CollisionShape2D" parent="DamageReceiver" index="0"]

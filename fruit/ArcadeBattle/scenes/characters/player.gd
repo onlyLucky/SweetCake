@@ -4,6 +4,10 @@ extends Character
 # 敌人对应槽位
 @onready var enemy_slots: Array = $EnemySlots.get_children()
 
+func _ready() -> void:
+	super._ready()
+	anim_attacks = ["punch","punch_alt","kick","roundkick"]
+
 func handle_input() ->void:
 	# 单位向量 (Vector2.DOWN,Vector2.LEFT... 方向移动 对角线速度很快，同样一像素，对角线距离长)
 	var direction := Input.get_vector("ui_left","ui_right","ui_up","ui_down")

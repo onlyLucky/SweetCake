@@ -31,9 +31,9 @@ const GRAVITY := 600.0
 @onready var collateral_damage_emitter: Area2D = $CollateralDamageEmitter
 
 # fall 下落
-enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED, DEATH, FLY }
+enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED, DEATH, FLY,PREP_ATTACK }
 
-var anim_attacks := ["punch","punch_alt","kick","roundkick"]
+var anim_attacks := []
 var anim_map := {
 	State.IDLE: "idle",
 	State.WALK: "walk",
@@ -47,6 +47,7 @@ var anim_map := {
 	State.GROUNDED: "grounded",
 	State.DEATH: "grounded",
 	State.FLY: "fly",
+	State.PREP_ATTACK : "idle",
 }
 # 攻击连招 下标
 var attack_combo_index := 0
@@ -88,6 +89,7 @@ func _process(_delta: float) -> void:
 	handle_animations()
 	# 处理空中时间
 	handle_air_time(_delta)
+	handle_prep_attack()
 	# 处理地面状态
 	handle_grounded()
 	# 处理死亡处理
@@ -110,6 +112,10 @@ func handle_movement():
 			state = State.WALK
 
 func handle_input() -> void:
+	pass
+
+# 等待攻击
+func handle_prep_attack() -> void:
 	pass
 	
 func handle_grounded():
@@ -232,7 +238,7 @@ func on_emit_collateral_damage(receiver: DamageReceiver) -> void:
 		receiver.damage_receiver.emit(0,direction,DamageReceiver.HitType.KNOCKDOWN)
 
 # 碰到左右两边隐性墙体 事件
-func on_wall_hit(wall: AnimatableBody2D):
+func on_wall_hit(_wall: AnimatableBody2D):
 	state = State.FALL
 	height_speed = knockdown_intensity
 	# 碰到墙体反弹回来
