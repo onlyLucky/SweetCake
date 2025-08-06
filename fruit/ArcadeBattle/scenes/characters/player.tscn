@@ -1,9 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://c4nndbm0015m"]
+[gd_scene load_steps=25 format=3 uid="uid://c4nndbm0015m"]
 
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ob2fb"]
 [ext_resource type="Script" path="res://scenes/characters/player.gd" id="2_a7djd"]
 [ext_resource type="Texture2D" uid="uid://br44rfk7nlrtv" path="res://assets/art/characters/player.png" id="2_dg0c6"]
 [ext_resource type="PackedScene" uid="uid://b0ysct0igjj8q" path="res://scenes/characters/enemy_slot.tscn" id="4_6ctg0"]
+[ext_resource type="Texture2D" uid="uid://bcnedx5vic7ww" path="res://assets/art/characters/player_knife.png" id="5_bbfq1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l806c"]
 radius = 2.0
@@ -34,6 +35,84 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KnifeSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+
+[sub_resource type="Animation" id="Animation_6baav"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+
+[sub_resource type="Animation" id="Animation_fekoy"]
+resource_name = "grounded"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [82]
+}
+
+[sub_resource type="Animation" id="Animation_q28ct"]
+resource_name = "hurt"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [70, 71, 72]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_action_complete"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_rob1d"]
@@ -364,9 +443,9 @@ tracks/0/keys = {
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
 
-[sub_resource type="Animation" id="Animation_q28ct"]
-resource_name = "hurt"
-length = 0.3
+[sub_resource type="Animation" id="Animation_k0enm"]
+resource_name = "throw"
+length = 0.1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -375,59 +454,36 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [70, 71, 72]
+"values": [31]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("KnifeSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.3),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [31]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"on_action_complete"
+"method": &"on_throw_complete"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_6baav"]
-resource_name = "fall"
-length = 0.1
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [80]
-}
-
-[sub_resource type="Animation" id="Animation_fekoy"]
-resource_name = "grounded"
-length = 0.1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterSprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [82]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_woh43"]
@@ -445,6 +501,7 @@ _data = {
 "punch_alt": SubResource("Animation_s6wog"),
 "roundkick": SubResource("Animation_qdwj5"),
 "takeoff": SubResource("Animation_bmqrm"),
+"throw": SubResource("Animation_k0enm"),
 "walk": SubResource("Animation_snf4l")
 }
 
@@ -458,6 +515,7 @@ size = Vector2(10, 10)
 collision_layer = 2
 collision_mask = 137
 script = ExtResource("2_a7djd")
+can_respawn = true
 damage = 4
 damage_power = 6
 jump_intensity = 150.0
@@ -511,6 +569,14 @@ position = Vector2(-15, 3)
 
 [node name="EnemySlot4" parent="EnemySlots" index="3" instance=ExtResource("4_6ctg0")]
 position = Vector2(-15, -4)
+
+[node name="KnifeSprite" parent="." index="8"]
+texture = ExtResource("5_bbfq1")
+centered = false
+offset = Vector2(-24, -48)
+hframes = 10
+vframes = 10
+frame = 80
 
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]

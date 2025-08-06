@@ -51,4 +51,3 @@ position = Vector2(75, 46)
 [node name="BasicEnemy" parent="ActorsContainer" node_paths=PackedStringArray("player") instance=ExtResource("5_23i52")]
 position = Vector2(64, 59)
 player = NodePath("../Player")
-damage = 50
