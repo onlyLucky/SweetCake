@@ -15,7 +15,7 @@ script = ExtResource("1_kiwei")
 [node name="Stage" parent="." instance=ExtResource("1_yhvxv")]
 
 [node name="Camera" type="Camera2D" parent="."]
-position = Vector2(55, 32)
+position = Vector2(50, 32)
 
 [node name="InvisibleWalls" type="Node2D" parent="Camera"]
 editor_description = "隐形墙壁"
@@ -44,6 +44,7 @@ y_sort_enabled = true
 
 [node name="Player" parent="ActorsContainer" instance=ExtResource("2_3kqp2")]
 position = Vector2(37, 44)
+has_knife = true
 
 [node name="Barrel" parent="ActorsContainer" instance=ExtResource("4_bvoa7")]
 position = Vector2(75, 46)

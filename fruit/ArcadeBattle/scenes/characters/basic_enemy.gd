@@ -33,7 +33,28 @@ func handle_input()->void:
 
 # 远程攻击移动
 func goto_range_position()->void:
-	pass
+	var camera := get_viewport().get_camera_2d()
+	var screen_width := get_viewport_rect().size.x
+	var screen_left_edge := camera.position.x - screen_width/2
+	var screen_right_edge := camera.position.x + screen_width/2
+	
+	var left_destination := Vector2(screen_left_edge + EDGE_SCREEN_BUFFER,player.position.y);
+	var right_destination := Vector2(screen_right_edge - EDGE_SCREEN_BUFFER,player.position.y);
+	var closest_destination := Vector2.ZERO
+	if (left_destination - position).length() < (right_destination - position).length():
+		closest_destination = left_destination
+	else:
+		closest_destination = right_destination
+	if (closest_destination - position).length() < 1:
+		velocity = Vector2.ZERO
+	else:
+		velocity = (closest_destination - position).normalized() * speed
+	
+	print(can_throw(), has_knife, projectile_aim.is_colliding())
+	if can_throw() and has_knife and projectile_aim.is_colliding():
+		state = State.THROW
+		time_since_knife_dismiss = Time.get_ticks_msec()
+		time_since_last_range_attack = Time.get_ticks_msec()
 
 # 近程攻击移动
 func goto_melee_position()->void:

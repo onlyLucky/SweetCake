@@ -179,10 +179,14 @@ func set_heading():
 func flip_sprites() -> void:
 	if heading == Vector2.RIGHT:
 		character_sprite.flip_h = false
+		knife_sprite.flip_h = false
 		damage_emitter.scale.x = 1
+		projectile_aim.scale.x = 1
 	else:
 		character_sprite.flip_h = true
+		knife_sprite.flip_h = true
 		damage_emitter.scale.x = -1
+		projectile_aim.scale.x = -1
 
 # 是否能移动
 func can_move() -> bool:
