@@ -35,6 +35,11 @@ editor_description = "伤害连锁发射器（碰撞到其他的敌人，玩家�
 target_position = Vector2(100, 0)
 collision_mask = 0
 
+[node name="CollectibleSensor" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleSensor"]
+
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]
 [editable path="CollateralDamageEmitter"]

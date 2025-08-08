@@ -49,8 +49,7 @@ func goto_range_position()->void:
 		velocity = Vector2.ZERO
 	else:
 		velocity = (closest_destination - position).normalized() * speed
-	
-	print(can_throw(), has_knife, projectile_aim.is_colliding())
+		
 	if can_throw() and has_knife and projectile_aim.is_colliding():
 		state = State.THROW
 		time_since_knife_dismiss = Time.get_ticks_msec()
@@ -58,6 +57,10 @@ func goto_range_position()->void:
 
 # 近程攻击移动
 func goto_melee_position()->void:
+	if can_pickup_collectible():
+		state = State.PICKUP
+		if player_slot!=null:
+			player.free_slot(self)
 	# 判断玩家插槽是否还有空位
 	if player_slot == null:
 		player_slot = player.reserve_slot(self)

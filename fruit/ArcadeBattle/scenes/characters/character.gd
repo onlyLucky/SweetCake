@@ -1,3 +1,4 @@
+## 角色类
 class_name Character
 extends CharacterBody2D
 
@@ -35,12 +36,13 @@ const GRAVITY := 600.0
 @onready var damage_receiver: DamageReceiver = $DamageReceiver
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var collateral_damage_emitter: Area2D = $CollateralDamageEmitter
+@onready var collectible_sensor: Area2D = $CollectibleSensor
 @onready var knife_sprite: Sprite2D = $KnifeSprite
 @onready var projectile_aim: RayCast2D = $ProjectileAim
 
 
 # fall 下落
-enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED, DEATH, FLY,PREP_ATTACK,THROW }
+enum State {IDLE, WALK,ATTACK,TAKEOFF,JUMP,LAND,JUMPKICK,HURT,FALL, GROUNDED, DEATH, FLY,PREP_ATTACK,THROW,PICKUP }
 
 var anim_attacks := []
 var anim_map := {
@@ -58,6 +60,7 @@ var anim_map := {
 	State.FLY: "fly",
 	State.PREP_ATTACK : "idle",
 	State.THROW : "throw",
+	State.PICKUP : "pickup",
 }
 # 攻击连招 下标
 var attack_combo_index := 0
@@ -207,6 +210,23 @@ func can_jumpkick() -> bool:
 func can_get_hurt() -> bool:
 	return [State.IDLE, State.WALK, State.TAKEOFF, State.JUMP, State.LAND].has(state)
 
+func can_pickup_collectible() -> bool:
+	var collectible_areas := collectible_sensor.get_overlapping_areas()
+	if collectible_areas.size() == 0:
+		return false
+	var collectible: Collectible = collectible_areas[0]
+	if collectible.type == Collectible.Type.KNIFE and not has_knife:
+		return true
+	return false
+
+func pickup_collectible() -> void:
+	if can_pickup_collectible():
+		var collectible_areas := collectible_sensor.get_overlapping_areas()
+		var collectible: Collectible = collectible_areas[0]
+		if collectible.type == Collectible.Type.KNIFE and not has_knife:
+			has_knife = true
+		collectible.queue_free()
+
 func is_collsion_disabled() -> bool:
 	return [State.GROUNDED,State.DEATH,State.FLY].has(state)
 	
@@ -223,6 +243,11 @@ func on_throw_complete() -> void:
 func on_takeoff_complete() -> void:
 	state = State.JUMP
 	height_speed = jump_intensity
+
+func on_pickup_complete() -> void:
+	state = State.IDLE
+	pickup_collectible()
+
 # 落地回调	
 func on_land_complete() -> void:
 	state = State.IDLE

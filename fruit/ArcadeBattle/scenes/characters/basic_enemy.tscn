@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b0yvbdw31xhtu"]
+[gd_scene load_steps=22 format=3 uid="uid://b0yvbdw31xhtu"]
 
 [ext_resource type="PackedScene" uid="uid://c64hy0yoesk81" path="res://scenes/characters/character.tscn" id="1_ul2aw"]
 [ext_resource type="Script" path="res://scenes/characters/basic_enemy.gd" id="2_1dy7n"]
@@ -498,6 +498,9 @@ size = Vector2(10, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wloxd"]
 size = Vector2(6, 6)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_88naq"]
+size = Vector2(3, 3)
+
 [node name="BasicEnemy" instance=ExtResource("1_ul2aw")]
 collision_layer = 4
 collision_mask = 8
@@ -506,10 +509,8 @@ duration_between_melee_attack = 2000
 duration_between_range_attack = 4000
 duration_prep_melee_attack = 500
 duration_prep_range_attack = 500
-can_respawn_knives = true
 damage = 2
 duration_grounded = 1000.0
-duration_between_knife_respawn = 2000.0
 fligth_speed = 100.0
 knockback_intensity = 10.0
 knockdown_intensity = 70.0
@@ -567,6 +568,13 @@ frame = 51
 
 [node name="ProjectileAim" parent="." index="8"]
 collision_mask = 2
+
+[node name="CollectibleSensor" parent="." index="9"]
+collision_layer = 0
+collision_mask = 256
+
+[node name="CollisionShape2D" parent="CollectibleSensor" index="0"]
+shape = SubResource("RectangleShape2D_88naq")
 
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]

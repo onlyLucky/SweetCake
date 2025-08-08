@@ -52,6 +52,7 @@ jump={
 2d_physics/layer_6="敌人伤害接收器 EnemyDamageReceiver"
 2d_physics/layer_7="可损坏道具伤害接收器 DestructibDamageReceiver"
 2d_physics/layer_8="隐形墙 InvisibleWalls"
+2d_physics/layer_9="可收集层 Collectibles"
 
 [rendering]
 
