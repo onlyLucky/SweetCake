@@ -1,39 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://udimr2a23671"]
+[gd_scene load_steps=10 format=3 uid="uid://udimr2a23671"]
 
 [ext_resource type="PackedScene" uid="uid://dro0n4t3rua1l" path="res://scenes/props/collectible.tscn" id="1_v706b"]
 [ext_resource type="Texture2D" uid="uid://byyknvjtkg55m" path="res://assets/art/props/knife.png" id="2_pae7q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1is6r"]
-
-[sub_resource type="Animation" id="Animation_6ea1n"]
-resource_name = "fall"
-length = 0.2
-loop_mode = 1
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollectibleSprite:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 1.5708, 3.14159, 4.71239]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:monitorable")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
 
 [sub_resource type="Animation" id="Animation_60tsd"]
 length = 0.001
@@ -68,6 +38,36 @@ tracks/2/path = NodePath(".:monitorable")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_6ea1n"]
+resource_name = "fall"
+length = 0.2
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollectibleSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 1.5708, 3.14159, 4.71239]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -153,13 +153,15 @@ _data = {
 "grounded": SubResource("Animation_j0fgj")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wayq4"]
+size = Vector2(3, 3)
+
 [node name="Knife" instance=ExtResource("1_v706b")]
 collision_layer = 256
 collision_mask = 6
 monitoring = false
 monitorable = false
-knockdown_intensity = 120.0
-speed = 100.0
+damage = 4
 
 [node name="CollisionShape2D" parent="." index="0"]
 position = Vector2(0, -2)
@@ -175,3 +177,11 @@ offset = Vector2(-8, -8)
 libraries = {
 "": SubResource("AnimationLibrary_ewyo8")
 }
+
+[node name="DamageEmitter" parent="." index="4"]
+collision_mask = 176
+
+[node name="CollisionShape2D" parent="DamageEmitter" index="0"]
+shape = SubResource("RectangleShape2D_wayq4")
+
+[editable path="DamageEmitter"]
